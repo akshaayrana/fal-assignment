@@ -15,6 +15,7 @@ interface IAlbum {
 const Albums = () => {
   const { userId } = useParams();
   const [userAlbums, setUsersAlbums] = useState([]);
+  const [error, setError] = useState("");
 
   const fetchUserAlbums = async () => {
     try {
@@ -24,9 +25,11 @@ const Albums = () => {
       const data = result.filter(
         (item: IAlbum) => item.userId.toString() == userId
       );
+      setError("");
       setUsersAlbums(data);
     } catch (error) {
       console.error(error);
+      setError("Failed to fetch");
     }
   };
 
@@ -36,18 +39,28 @@ const Albums = () => {
   return (
     <div>
       <Title text="Albums" />
-      <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5">
+      <ul
+        className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5"
+        role="listitem"
+      >
         {userAlbums.map((album: IAlbum) => (
           <li className="bg-white border rounded-lg" key={album.id}>
             <Link href={`/albums/${userId}/photos/${album.id}`}>
               <div className="flex items-center justify-center overflow-hidden">
-                <Image src="/folder.svg" width={50} height={50} alt="" />
+                <Image
+                  src="/folder.svg"
+                  width={50}
+                  height={50}
+                  role="img"
+                  alt={album.title}
+                />
                 <h3 className="grow pl-2 truncate">{album.title}</h3>
               </div>
             </Link>
           </li>
         ))}
       </ul>
+      {error && error}
     </div>
   );
 };

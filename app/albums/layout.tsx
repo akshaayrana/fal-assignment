@@ -24,7 +24,12 @@ const AlbumLayout = ({
     <div>
       {breadcrumb.map((path, index) => {
         return (
-          <Link href={path.url} className="capitalize" key={index}>
+          <Link
+            href={path.url}
+            className="capitalize"
+            key={index}
+            role="breadcrumbs"
+          >
             {path.name}
             {index + 1 < breadcrumb.length && <span>&nbsp;&gt;&nbsp;</span>}
           </Link>

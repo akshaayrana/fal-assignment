@@ -7,10 +7,13 @@ interface IUser {
   email: string;
 }
 const getUsers = async () => {
-  const url = "https://jsonplaceholder.typicode.com/users";
-  const res = await fetch(url);
-  return await res.json();
+  try {
+    const url = "https://jsonplaceholder.typicode.com/users";
+    const res = await fetch(url);
+    return await res.json();
+  } catch (error) {}
 };
+
 const Home = async () => {
   const usersList = await getUsers();
   return (
@@ -20,9 +23,9 @@ const Home = async () => {
         role="list"
         className="grid gap-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1"
       >
-        {usersList.map((user: IUser) => (
+        {usersList?.map((user: IUser) => (
           <li className="bg-white p-3 rounded-lg" key={user.id}>
-            <Link href={`/albums/${user.id}`} key={user.id}>
+            <Link href={`/albums/${user.id}`} key={user.id} role="user-link">
               <div className="flex items-center gap-x-6">
                 <img
                   className="h-16 w-16 rounded-full"

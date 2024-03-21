@@ -1,7 +1,7 @@
+import Home from "../app/page";
 import { render, screen } from "@testing-library/react";
 import {rest} from "msw";
 import { setupServer } from "msw/node";
-import Home from "@app/page";
 
 // Mocking the API response
 const server = setupServer(
@@ -12,17 +12,17 @@ const server = setupServer(
         { id: 2, name: "Jane Smith", email: "jane@example.com" },
       ])
     );
-  })
+  }),
 );
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-describe("Home page", () => {
+describe("Home Component", () => {
   it("renders users list", async () => {
     render(<Home />);
-
+    expect(screen.getByText('Users')).toBeInTheDocument();
     // Wait for users to be fetched and rendered
     await screen.findByText("John Doe");
     await screen.findByText("Jane Smith");
@@ -40,11 +40,11 @@ describe("Home page", () => {
     await screen.findByText("Jane Smith");
 
     // Check if the links for users are rendered correctly
-    expect(screen.getByRole("link", { name: "John Doe" })).toHaveAttribute(
+    expect(screen.getByRole("user-link")).toHaveAttribute(
       "href",
       "/albums/1"
     );
-    expect(screen.getByRole("link", { name: "Jane Smith" })).toHaveAttribute(
+    expect(screen.getByRole("user-link")).toHaveAttribute(
       "href",
       "/albums/2"
     );
